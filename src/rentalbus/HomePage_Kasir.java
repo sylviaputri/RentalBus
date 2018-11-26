@@ -5,6 +5,9 @@
  */
 package rentalbus;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import static rentalbus.Login.nama;
 
 /**
@@ -96,7 +99,11 @@ public class HomePage_Kasir extends javax.swing.JFrame {
     private void btnDaftarBusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDaftarBusMouseClicked
         //pindah ke halaman DAFTAR BUS
         this.setVisible(false);
-        new DaftarBus_Kasir(nama).setVisible(true);
+        try {
+            new DaftarBus_Kasir(nama).setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(HomePage_Kasir.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnDaftarBusMouseClicked
 
     private void btnPeminjamanBusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPeminjamanBusMouseClicked
