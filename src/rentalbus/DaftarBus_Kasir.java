@@ -107,7 +107,9 @@ public class DaftarBus_Kasir extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jScrollPane1.setBorder(null);
+        jScrollPane2.setBorder(null);
+
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         tableBus.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
