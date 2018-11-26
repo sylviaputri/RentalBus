@@ -25,11 +25,11 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
-              <Component id="jButton2" min="-2" pref="141" max="-2" attributes="0"/>
+              <Component id="btnDaftarBus" min="-2" pref="141" max="-2" attributes="0"/>
               <EmptySpace pref="204" max="32767" attributes="0"/>
-              <Component id="jButton1" min="-2" pref="141" max="-2" attributes="0"/>
+              <Component id="btnDaftarJenisBus" min="-2" pref="141" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="178" max="-2" attributes="0"/>
-              <Component id="jButton3" min="-2" pref="141" max="-2" attributes="0"/>
+              <Component id="btnDaftarKasir" min="-2" pref="141" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
           </Group>
           <Group type="102" alignment="1" attributes="0">
@@ -46,9 +46,9 @@
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace pref="169" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jButton3" alignment="3" min="-2" pref="105" max="-2" attributes="0"/>
-                  <Component id="jButton2" alignment="3" min="-2" pref="105" max="-2" attributes="0"/>
-                  <Component id="jButton1" alignment="3" min="-2" pref="105" max="-2" attributes="0"/>
+                  <Component id="btnDaftarKasir" alignment="3" min="-2" pref="105" max="-2" attributes="0"/>
+                  <Component id="btnDaftarBus" alignment="3" min="-2" pref="105" max="-2" attributes="0"/>
+                  <Component id="btnDaftarJenisBus" alignment="3" min="-2" pref="105" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="144" max="-2" attributes="0"/>
           </Group>
@@ -61,20 +61,29 @@
         <Property name="text" type="java.lang.String" value="Home Page Admin"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton1">
+    <Component class="javax.swing.JButton" name="btnDaftarJenisBus">
       <Properties>
         <Property name="text" type="java.lang.String" value="Daftar Jenis Bus"/>
       </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnDaftarJenisBusMouseClicked"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton2">
+    <Component class="javax.swing.JButton" name="btnDaftarBus">
       <Properties>
         <Property name="text" type="java.lang.String" value="Daftar Bus"/>
       </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnDaftarBusMouseClicked"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton3">
+    <Component class="javax.swing.JButton" name="btnDaftarKasir">
       <Properties>
         <Property name="text" type="java.lang.String" value="Daftar Kasir"/>
       </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnDaftarKasirMouseClicked"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

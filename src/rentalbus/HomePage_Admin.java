@@ -5,6 +5,8 @@
  */
 package rentalbus;
 
+import static rentalbus.Login.nama;
+
 /**
  *
  * @author Sylvia Putri
@@ -28,19 +30,34 @@ public class HomePage_Admin extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnDaftarJenisBus = new javax.swing.JButton();
+        btnDaftarBus = new javax.swing.JButton();
+        btnDaftarKasir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Home Page Admin");
 
-        jButton1.setText("Daftar Jenis Bus");
+        btnDaftarJenisBus.setText("Daftar Jenis Bus");
+        btnDaftarJenisBus.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnDaftarJenisBusMouseClicked(evt);
+            }
+        });
 
-        jButton2.setText("Daftar Bus");
+        btnDaftarBus.setText("Daftar Bus");
+        btnDaftarBus.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnDaftarBusMouseClicked(evt);
+            }
+        });
 
-        jButton3.setText("Daftar Kasir");
+        btnDaftarKasir.setText("Daftar Kasir");
+        btnDaftarKasir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnDaftarKasirMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -48,11 +65,11 @@ public class HomePage_Admin extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(43, 43, 43)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnDaftarBus, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 204, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnDaftarJenisBus, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(178, 178, 178)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnDaftarKasir, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(62, 62, 62))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -66,14 +83,32 @@ public class HomePage_Admin extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 169, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnDaftarKasir, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDaftarBus, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDaftarJenisBus, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(144, 144, 144))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnDaftarBusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDaftarBusMouseClicked
+        //pindah ke halaman DAFTAR BUS
+        this.setVisible(false);
+        new DaftarBus_Admin().setVisible(true);
+    }//GEN-LAST:event_btnDaftarBusMouseClicked
+
+    private void btnDaftarJenisBusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDaftarJenisBusMouseClicked
+        //pindah ke halaman DAFTAR JENIS BUS
+        this.setVisible(false);
+        new DaftarJenisBus_Admin().setVisible(true);
+    }//GEN-LAST:event_btnDaftarJenisBusMouseClicked
+
+    private void btnDaftarKasirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDaftarKasirMouseClicked
+        //pindah ke halaman DAFTAR KASIR
+        this.setVisible(false);
+        new DaftarKasir_Admin().setVisible(true);
+    }//GEN-LAST:event_btnDaftarKasirMouseClicked
 
     /**
      * @param args the command line arguments
@@ -111,9 +146,9 @@ public class HomePage_Admin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton btnDaftarBus;
+    private javax.swing.JButton btnDaftarJenisBus;
+    private javax.swing.JButton btnDaftarKasir;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }
