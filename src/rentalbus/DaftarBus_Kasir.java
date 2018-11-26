@@ -9,10 +9,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 import static rentalbus.Login.nama;
 
 /**
@@ -22,6 +24,8 @@ import static rentalbus.Login.nama;
 public class DaftarBus_Kasir extends javax.swing.JFrame {
     static String nama;
     KoneksiDB kon = new KoneksiDB();
+    DetailBus_Kasir detailBus;
+    ArrayList<Bus> busList;
     
     public DaftarBus_Kasir(String nama) throws SQLException {
         initComponents();
@@ -30,7 +34,7 @@ public class DaftarBus_Kasir extends javax.swing.JFrame {
     }
     
     public ArrayList<Bus> busList() throws SQLException{
-        ArrayList<Bus> busList = new ArrayList<>();
+        busList = new ArrayList<>();
         ArrayList<JenisBus> jenisBusList = jenisBusList();
         try{
             kon.connect();
@@ -108,7 +112,7 @@ public class DaftarBus_Kasir extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jComboBox3 = new javax.swing.JComboBox<>();
         jTextField2 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        btnBack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -131,6 +135,11 @@ public class DaftarBus_Kasir extends javax.swing.JFrame {
             }
         });
         tableBus.setCellSelectionEnabled(true);
+        tableBus.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableBusMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tableBus);
         tableBus.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
@@ -150,7 +159,12 @@ public class DaftarBus_Kasir extends javax.swing.JFrame {
 
         jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nopol", "Jenis", "Status" }));
 
-        jButton2.setText("Back");
+        btnBack.setText("Back");
+        btnBack.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnBackMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -160,7 +174,7 @@ public class DaftarBus_Kasir extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton2)
+                        .addComponent(btnBack)
                         .addGap(338, 338, 338)
                         .addComponent(jLabel1))
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -194,7 +208,7 @@ public class DaftarBus_Kasir extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addComponent(jButton2))
+                    .addComponent(btnBack))
                 .addGap(38, 38, 38)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -231,35 +245,42 @@ public class DaftarBus_Kasir extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+    
+    //kalau table di click, keluar detailnya -> menuju halaman DETAIL BUS
+    private void tableBusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableBusMouseClicked
+        int index = tableBus.getSelectedRow();
+        TableModel model = tableBus.getModel();
+        String nopol = model.getValueAt(index, 0).toString();
+        Bus bus = null;
+        for(int i=0;i<busList.size();i++){
+            if(busList.get(i).getNopol().equals(nopol)){
+                bus=busList.get(i);
+                break;
+            }
+        }
+        detailBus = new DetailBus_Kasir(nama);
+        detailBus.setVisible(true);
+        this.setVisible(false);
+        detailBus.pack();
+        detailBus.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        detailBus.lblNopol.setText(bus.getNopol());
+        detailBus.lblBanyakSewa.setText(String.valueOf(bus.getJenisBus().getJumlahDisewa())+" kali");
+        detailBus.lblHarga.setText("Rp "+String.valueOf(bus.getJenisBus().getHargaSewa()));
+        detailBus.lblNamaJenis.setText(bus.getJenisBus().getNamaJenis());
+        detailBus.lblSopir.setText(bus.getNamaSupir());
+        detailBus.lblStatus.setText(bus.getStatusSewa());
+    }//GEN-LAST:event_tableBusMouseClicked
+
+    private void btnBackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackMouseClicked
+        this.setVisible(false);
+        new HomePage_Kasir(nama).setVisible(true);
+    }//GEN-LAST:event_btnBackMouseClicked
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DaftarBus_Kasir.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DaftarBus_Kasir.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DaftarBus_Kasir.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DaftarBus_Kasir.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
@@ -272,8 +293,8 @@ public class DaftarBus_Kasir extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBack;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
