@@ -121,7 +121,7 @@ public class Login extends javax.swing.JFrame {
                     System.out.println(nama);
                     //pindah ke homepage kasir
                     this.setVisible(false);
-                    new HomePage_Kasir().setVisible(true);
+                    new HomePage_Kasir(nama).setVisible(true);
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);

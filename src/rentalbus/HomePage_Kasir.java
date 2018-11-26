@@ -10,11 +10,11 @@ package rentalbus;
  * @author Sylvia Putri
  */
 public class HomePage_Kasir extends javax.swing.JFrame {
-
+    static String nama;
     /**
      * Creates new form HomePage_Kasir
      */
-    public HomePage_Kasir() {
+    public HomePage_Kasir(String nama) {
         initComponents();
     }
 
@@ -105,7 +105,7 @@ public class HomePage_Kasir extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new HomePage_Kasir().setVisible(true);
+                new HomePage_Kasir(nama).setVisible(true);
             }
         });
     }
