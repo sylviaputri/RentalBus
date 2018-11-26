@@ -10,12 +10,14 @@ package rentalbus;
  * @author Sylvia Putri
  */
 public class TransaksiPeminjaman_Kasir extends javax.swing.JFrame {
+    static String nama;
 
     /**
      * Creates new form TransaksiPeminjaman_Kasir
      */
-    public TransaksiPeminjaman_Kasir() {
+    public TransaksiPeminjaman_Kasir(String nama) {
         initComponents();
+        this.nama = nama;
     }
 
     /**
@@ -400,7 +402,7 @@ public class TransaksiPeminjaman_Kasir extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TransaksiPeminjaman_Kasir().setVisible(true);
+                new TransaksiPeminjaman_Kasir(nama).setVisible(true);
             }
         });
     }

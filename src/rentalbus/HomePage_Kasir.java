@@ -5,6 +5,8 @@
  */
 package rentalbus;
 
+import static rentalbus.Login.nama;
+
 /**
  *
  * @author Sylvia Putri
@@ -16,6 +18,7 @@ public class HomePage_Kasir extends javax.swing.JFrame {
      */
     public HomePage_Kasir(String nama) {
         initComponents();
+        this.nama = nama;
     }
 
     /**
@@ -28,31 +31,46 @@ public class HomePage_Kasir extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnPengembalianBus = new javax.swing.JButton();
+        btnDaftarBus = new javax.swing.JButton();
+        btnPeminjamanBus = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Home Page Kasir");
 
-        jButton1.setText("Pengembalian Bus");
+        btnPengembalianBus.setText("Pengembalian Bus");
+        btnPengembalianBus.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnPengembalianBusMouseClicked(evt);
+            }
+        });
 
-        jButton2.setText("Daftar Bus");
+        btnDaftarBus.setText("Daftar Bus");
+        btnDaftarBus.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnDaftarBusMouseClicked(evt);
+            }
+        });
 
-        jButton3.setText("Peminjaman Bus");
+        btnPeminjamanBus.setText("Peminjaman Bus");
+        btnPeminjamanBus.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnPeminjamanBusMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 204, Short.MAX_VALUE)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(58, 58, 58)
+                .addComponent(btnDaftarBus, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 188, Short.MAX_VALUE)
+                .addComponent(btnPeminjamanBus, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(172, 172, 172)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnPengembalianBus, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(68, 68, 68))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -62,18 +80,36 @@ public class HomePage_Kasir extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(28, 28, 28)
+                .addGap(14, 14, 14)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 215, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 229, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnPeminjamanBus, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnPengembalianBus, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDaftarBus, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(98, 98, 98))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnDaftarBusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDaftarBusMouseClicked
+        //pindah ke halaman DAFTAR BUS
+        this.setVisible(false);
+        new DaftarBus_Kasir(nama).setVisible(true);
+    }//GEN-LAST:event_btnDaftarBusMouseClicked
+
+    private void btnPeminjamanBusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPeminjamanBusMouseClicked
+        //pindah ke halaman PEMINJAMAN
+        this.setVisible(false);
+        new TransaksiPeminjaman_Kasir(nama).setVisible(true);
+    }//GEN-LAST:event_btnPeminjamanBusMouseClicked
+
+    private void btnPengembalianBusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPengembalianBusMouseClicked
+        //pindah ke halaman PENGEMBALIAN
+        this.setVisible(false);
+        new TransaksiPengembalian_Kasir(nama).setVisible(true);
+    }//GEN-LAST:event_btnPengembalianBusMouseClicked
 
     /**
      * @param args the command line arguments
@@ -111,9 +147,9 @@ public class HomePage_Kasir extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton btnDaftarBus;
+    private javax.swing.JButton btnPeminjamanBus;
+    private javax.swing.JButton btnPengembalianBus;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }
