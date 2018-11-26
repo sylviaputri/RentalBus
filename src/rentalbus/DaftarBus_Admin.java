@@ -9,9 +9,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import static rentalbus.DaftarBus_Kasir.nama;
 import static rentalbus.Login.nama;
 
 /**
@@ -20,7 +22,7 @@ import static rentalbus.Login.nama;
  */
 public class DaftarBus_Admin extends javax.swing.JFrame {
     KoneksiDB kon = new KoneksiDB();
-    DetailBus_Kasir detailBus;
+    DetailBus_Admin detailBus;
     ArrayList<Bus> busList;
     
     //CONSTRUCTOR
@@ -264,6 +266,17 @@ public class DaftarBus_Admin extends javax.swing.JFrame {
             }
         }
         //MASIH ADA TAMBAHAN
+        detailBus = new DetailBus_Admin();
+        detailBus.setVisible(true);
+        this.setVisible(false);
+        detailBus.pack();
+        detailBus.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        detailBus.txtNopol.setText(bus.getNopol());
+        detailBus.lblBanyakSewa.setText(String.valueOf(bus.getJenisBus().getJumlahDisewa())+" kali");
+        detailBus.lblHarga.setText("Rp "+String.valueOf(bus.getJenisBus().getHargaSewa()));
+        detailBus.txtJenis.setText(bus.getJenisBus().getNamaJenis());
+        detailBus.txtSopir.setText(bus.getNamaSupir());
+        detailBus.lblStatus.setText(bus.getStatusSewa());
     }//GEN-LAST:event_tableBusMouseClicked
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
