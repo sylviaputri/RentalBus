@@ -265,7 +265,11 @@ public class DaftarBus_Admin extends javax.swing.JFrame {
                 break;
             }
         }
-        detailBus = new DetailBus_Admin();
+        try {
+            detailBus = new DetailBus_Admin();
+        } catch (SQLException ex) {
+            Logger.getLogger(DaftarBus_Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
         detailBus.setVisible(true);
         this.setVisible(false);
         detailBus.pack();
@@ -273,9 +277,9 @@ public class DaftarBus_Admin extends javax.swing.JFrame {
         detailBus.txtNopol.setText(bus.getNopol());
         detailBus.lblBanyakSewa.setText(String.valueOf(bus.getJenisBus().getJumlahDisewa())+" kali");
         detailBus.lblHarga.setText("Rp "+String.valueOf(bus.getJenisBus().getHargaSewa()));
-        detailBus.txtJenis.setText(bus.getJenisBus().getNamaJenis());
         detailBus.txtSopir.setText(bus.getNamaSupir());
         detailBus.lblStatus.setText(bus.getStatusSewa());
+        detailBus.comboJenis.setSelectedItem(bus.getJenisBus().getNamaJenis());
     }//GEN-LAST:event_tableBusMouseClicked
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
