@@ -178,10 +178,10 @@ public class DaftarKasir_Admin extends javax.swing.JFrame {
     private void tableKasirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableKasirMouseClicked
         int index = tableKasir.getSelectedRow();
         TableModel model = tableKasir.getModel();
-        String nopol = model.getValueAt(index, 0).toString();
+        String idKasir = model.getValueAt(index, 0).toString();
         Kasir kasir = null;
         for(int i=0;i<kasirList.size();i++){
-            if(kasirList.get(i).getIdKasir().equals(nopol)){
+            if(kasirList.get(i).getIdKasir().equals(idKasir)){
                 kasir=kasirList.get(i);
                 break;
             }
