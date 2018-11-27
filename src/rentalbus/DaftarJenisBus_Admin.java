@@ -5,19 +5,64 @@
  */
 package rentalbus;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
 /**
  *
  * @author Sylvia Putri
  */
 public class DaftarJenisBus_Admin extends javax.swing.JFrame {
-
-    /**
-     * Creates new form DaftarJenisBus_Admin
-     */
-    public DaftarJenisBus_Admin() {
+    KoneksiDB kon = new KoneksiDB();
+    DetailJenisBus_Admin detailJenisBus;
+    ArrayList<JenisBus> jenisBusList;
+    
+    public DaftarJenisBus_Admin() throws SQLException {
         initComponents();
+        ArrayList<JenisBus> list = jenisBusList();
+        show_jenisBus(list);
     }
 
+    //Mendapatkan semua data KASIR dari DB
+    public ArrayList<JenisBus> jenisBusList() throws SQLException{
+        jenisBusList = new ArrayList<>();
+        try{
+            kon.connect();
+            kon.createQuery("select * from jenis_bus");
+            JenisBus jenisBus;
+            while(kon.myRs.next()){
+                jenisBus = new JenisBus(kon.myRs.getString("id_jenis"), kon.myRs.getString("nama_jenis"), Integer.valueOf(kon.myRs.getString("harga_sewa")), Integer.valueOf(kon.myRs.getString("jumlah_disewa")));
+                jenisBusList.add(jenisBus);
+            }
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+        finally{
+            kon.close();
+        }
+        return jenisBusList;
+    }
+    
+    //Menampilkan data JENIS BUS kedalam TABEL
+    public void show_jenisBus(ArrayList<JenisBus> list){
+        DefaultTableModel model = (DefaultTableModel)tableJenisBus.getModel();
+        Object[] row = new Object[4];
+        for(int i=0;i<list.size();i++){
+            row[0] = list.get(i).getIdJenis();
+            row[1] = list.get(i).getNamaJenis();
+            row[2] = list.get(i).getHargaSewa();
+            row[3] = list.get(i).getJumlahDisewa();
+            model.addRow(row);
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -30,48 +75,68 @@ public class DaftarJenisBus_Admin extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tableJenisBus = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnBack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jScrollPane1.setBorder(null);
+
+        tableJenisBus.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Nama Jenis Bus", "Harga Sewa/Hari (Rp)", "Banyak Disewa"
             }
-        ));
-        jTable1.setCellSelectionEnabled(true);
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tableJenisBus.setCellSelectionEnabled(true);
+        tableJenisBus.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableJenisBusMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tableJenisBus);
+        tableJenisBus.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         jLabel1.setText("Daftar Jenis Bus");
 
         jButton3.setText("Tambah Jenis Bus");
 
-        jButton2.setText("Back");
+        btnBack.setText("Back");
+        btnBack.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnBackMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton3)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 742, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jButton2)
+                            .addContainerGap()
+                            .addComponent(btnBack)
                             .addGap(338, 338, 338)
                             .addComponent(jLabel1))
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 870, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(40, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGap(698, 698, 698)
+                            .addComponent(jButton3))))
+                .addContainerGap(105, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -79,12 +144,12 @@ public class DaftarJenisBus_Admin extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addComponent(jButton2))
-                .addGap(38, 38, 38)
+                    .addComponent(btnBack))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 152, Short.MAX_VALUE)
                 .addComponent(jButton3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(77, 77, 77))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(99, 99, 99))
         );
 
         jScrollPane2.setViewportView(jPanel1);
@@ -102,6 +167,34 @@ public class DaftarJenisBus_Admin extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnBackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackMouseClicked
+        this.setVisible(false);
+        new HomePage_Admin().setVisible(true);
+    }//GEN-LAST:event_btnBackMouseClicked
+
+    //kalau data di tabel di klik, ke halaman DETAIL JENIS BUS
+    private void tableJenisBusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableJenisBusMouseClicked
+        int index = tableJenisBus.getSelectedRow();
+        TableModel model = tableJenisBus.getModel();
+        String idJenis = model.getValueAt(index, 0).toString();
+        JenisBus jenisBus = null;
+        for(int i=0;i<jenisBusList.size();i++){
+            if(jenisBusList.get(i).getIdJenis().equals(idJenis)){
+                jenisBus=jenisBusList.get(i);
+                break;
+            }
+        }
+        detailJenisBus = new DetailJenisBus_Admin();
+        detailJenisBus.setVisible(true);
+        this.setVisible(false);
+        detailJenisBus.pack();
+        detailJenisBus.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        detailJenisBus.lblIdJenis.setText(jenisBus.getIdJenis());
+        detailJenisBus.txtNamaJenis.setText(jenisBus.getNamaJenis());
+        detailJenisBus.txtHargaSewa.setText("Rp "+String.valueOf(jenisBus.getHargaSewa()));
+        detailJenisBus.lblBanyakSewa.setText(String.valueOf(jenisBus.getJumlahDisewa()) + " kali");
+    }//GEN-LAST:event_tableJenisBusMouseClicked
 
     /**
      * @param args the command line arguments
@@ -133,18 +226,22 @@ public class DaftarJenisBus_Admin extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new DaftarJenisBus_Admin().setVisible(true);
+                try {
+                    new DaftarJenisBus_Admin().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(DaftarJenisBus_Admin.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btnBack;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tableJenisBus;
     // End of variables declaration//GEN-END:variables
 }

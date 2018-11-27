@@ -108,13 +108,21 @@ public class HomePage_Admin extends javax.swing.JFrame {
     private void btnDaftarJenisBusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDaftarJenisBusMouseClicked
         //pindah ke halaman DAFTAR JENIS BUS
         this.setVisible(false);
-        new DaftarJenisBus_Admin().setVisible(true);
+        try {
+            new DaftarJenisBus_Admin().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(HomePage_Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnDaftarJenisBusMouseClicked
 
     private void btnDaftarKasirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDaftarKasirMouseClicked
         //pindah ke halaman DAFTAR KASIR
         this.setVisible(false);
-        new DaftarKasir_Admin().setVisible(true);
+        try {
+            new DaftarKasir_Admin().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(HomePage_Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnDaftarKasirMouseClicked
 
     /**
