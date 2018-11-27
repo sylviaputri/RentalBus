@@ -210,7 +210,7 @@ public class DetailBus_Kasir extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     public javax.swing.JLabel lblBanyakSewa;
     public javax.swing.JLabel lblHarga;
-    public javax.swing.JLabel lblNamaJenis;
+    private javax.swing.JLabel lblNamaJenis;
     public javax.swing.JLabel lblNopol;
     public javax.swing.JLabel lblSopir;
     public javax.swing.JLabel lblStatus;

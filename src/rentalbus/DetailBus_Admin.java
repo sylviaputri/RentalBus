@@ -15,12 +15,22 @@ import static rentalbus.DetailBus_Kasir.nama;
  * @author Sylvia Putri
  */
 public class DetailBus_Admin extends javax.swing.JFrame {
-
+    KoneksiDB kon = new KoneksiDB();
     /**
      * Creates new form DetailBus_Admin
      */
-    public DetailBus_Admin() {
+    public DetailBus_Admin() throws SQLException {
         initComponents();
+        getItemForComboJenis();
+    }
+    
+    public void getItemForComboJenis() throws SQLException{
+        kon.connect();
+        kon.createQuery("select nama_jenis from jenis_bus");
+        while(kon.myRs.next()){
+            comboJenis.addItem(kon.myRs.getString("nama_jenis"));
+        }
+        kon.close();
     }
 
     /**
@@ -47,10 +57,10 @@ public class DetailBus_Admin extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         txtNopol = new javax.swing.JTextField();
         txtSopir = new javax.swing.JTextField();
-        txtJenis = new javax.swing.JTextField();
         lblBanyakSewa = new javax.swing.JLabel();
         lblHarga = new javax.swing.JLabel();
         lblStatus = new javax.swing.JLabel();
+        comboJenis = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -88,13 +98,6 @@ public class DetailBus_Admin extends javax.swing.JFrame {
             }
         });
 
-        txtJenis.setText("Big bus");
-        txtJenis.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtJenisActionPerformed(evt);
-            }
-        });
-
         lblBanyakSewa.setText("234 kali");
 
         lblHarga.setText("1.500.000");
@@ -129,17 +132,19 @@ public class DetailBus_Admin extends javax.swing.JFrame {
                                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txtNopol, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
-                                .addComponent(lblStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lblHarga, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txtSopir)
-                                .addComponent(txtJenis)
-                                .addComponent(lblBanyakSewa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(comboJenis, 0, 147, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtNopol, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
+                                    .addComponent(lblStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(lblHarga, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtSopir)
+                                    .addComponent(lblBanyakSewa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGap(195, 195, 195)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 131, Short.MAX_VALUE)
                             .addComponent(jButton2)))
                     .addGroup(layout.createSequentialGroup()
@@ -185,7 +190,7 @@ public class DetailBus_Admin extends javax.swing.JFrame {
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel7)
-                            .addComponent(txtJenis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(comboJenis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8)
@@ -204,10 +209,6 @@ public class DetailBus_Admin extends javax.swing.JFrame {
     private void txtSopirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSopirActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSopirActionPerformed
-
-    private void txtJenisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtJenisActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtJenisActionPerformed
 
     private void btnBackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackMouseClicked
         this.setVisible(false);
@@ -248,13 +249,18 @@ public class DetailBus_Admin extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new DetailBus_Admin().setVisible(true);
+                try {
+                    new DetailBus_Admin().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(DetailBus_Admin.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
+    public javax.swing.JComboBox<String> comboJenis;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel10;
@@ -270,7 +276,6 @@ public class DetailBus_Admin extends javax.swing.JFrame {
     public javax.swing.JLabel lblBanyakSewa;
     public javax.swing.JLabel lblHarga;
     public javax.swing.JLabel lblStatus;
-    public javax.swing.JTextField txtJenis;
     public javax.swing.JTextField txtNopol;
     public javax.swing.JTextField txtSopir;
     // End of variables declaration//GEN-END:variables
