@@ -265,7 +265,6 @@ public class DaftarBus_Admin extends javax.swing.JFrame {
                 break;
             }
         }
-        //MASIH ADA TAMBAHAN
         detailBus = new DetailBus_Admin();
         detailBus.setVisible(true);
         this.setVisible(false);

@@ -6,15 +6,62 @@
 
 package rentalbus;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
 /**
  *
  * @author Sylvia Putri
  */
 public class DaftarKasir_Admin extends javax.swing.JFrame {
+    KoneksiDB kon = new KoneksiDB();
+    DetailKasir_Admin detailKasir;
+    ArrayList<Kasir> kasirList;
 
     /** Creates new form DaftarKasir_Admin */
-    public DaftarKasir_Admin() {
+    public DaftarKasir_Admin() throws SQLException {
         initComponents();
+        ArrayList<Kasir> list = kasirList();
+        show_kasir(list);
+    }
+    
+    //Mendapatkan semua data KASIR dari DB
+    public ArrayList<Kasir> kasirList() throws SQLException{
+        kasirList = new ArrayList<>();
+        try{
+            kon.connect();
+            kon.createQuery("select * from kasir");
+            Kasir kasir;
+            while(kon.myRs.next()){
+                kasir = new Kasir(kon.myRs.getString("id_kasir"), kon.myRs.getString("nama_kasir"), kon.myRs.getString("no_ktp"), kon.myRs.getString("username"), kon.myRs.getString("password"));
+                kasirList.add(kasir);
+            }
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+        finally{
+            kon.close();
+        }
+        return kasirList;
+    }
+    
+    //Menampilkan data KASIR kedalam TABEL
+    public void show_kasir(ArrayList<Kasir> list){
+        DefaultTableModel model = (DefaultTableModel)tableKasir.getModel();
+        Object[] row = new Object[4];
+        for(int i=0;i<list.size();i++){
+            row[0] = list.get(i).getIdKasir();
+            row[1] = list.get(i).getNamaKasir();
+            row[2] = list.get(i).getKtpKasir();
+            model.addRow(row);
+        }
     }
 
     /** This method is called from within the constructor to
@@ -29,61 +76,81 @@ public class DaftarKasir_Admin extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tableKasir = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnBack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jScrollPane1.setBorder(null);
+
+        tableKasir.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID Kasir", "Nama", "No KTP"
             }
-        ));
-        jTable1.setCellSelectionEnabled(true);
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tableKasir.setCellSelectionEnabled(true);
+        tableKasir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableKasirMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tableKasir);
+        tableKasir.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         jLabel1.setText("Daftar Kasir");
 
         jButton3.setText("Tambah Kasir");
 
-        jButton2.setText("Back");
+        btnBack.setText("Back");
+        btnBack.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnBackMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jButton3)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jButton2)
-                            .addGap(338, 338, 338)
+                            .addContainerGap()
+                            .addComponent(btnBack)
+                            .addGap(334, 334, 334)
                             .addComponent(jLabel1))
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 870, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(40, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGap(119, 119, 119)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 656, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(145, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jButton2))
-                .addGap(38, 38, 38)
+                    .addComponent(btnBack)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 152, Short.MAX_VALUE)
                 .addComponent(jButton3)
-                .addGap(77, 77, 77)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(79, Short.MAX_VALUE))
+                .addGap(24, 24, 24))
         );
 
         jScrollPane2.setViewportView(jPanel1);
@@ -101,6 +168,34 @@ public class DaftarKasir_Admin extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnBackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackMouseClicked
+        this.setVisible(false);
+        new HomePage_Admin().setVisible(true);
+    }//GEN-LAST:event_btnBackMouseClicked
+
+    //kalau data tabel diklik, ke DETAIL KASIR
+    private void tableKasirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableKasirMouseClicked
+        int index = tableKasir.getSelectedRow();
+        TableModel model = tableKasir.getModel();
+        String nopol = model.getValueAt(index, 0).toString();
+        Kasir kasir = null;
+        for(int i=0;i<kasirList.size();i++){
+            if(kasirList.get(i).getIdKasir().equals(nopol)){
+                kasir=kasirList.get(i);
+                break;
+            }
+        }
+        detailKasir = new DetailKasir_Admin();
+        detailKasir.setVisible(true);
+        this.setVisible(false);
+        detailKasir.pack();
+        detailKasir.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        detailKasir.lblIdKasir.setText(kasir.getIdKasir());
+        detailKasir.txtNama.setText(kasir.getNamaKasir());
+        detailKasir.txtKTP.setText(kasir.getKtpKasir());
+        detailKasir.txtUsername.setText(kasir.getUsernameKasir());
+    }//GEN-LAST:event_tableKasirMouseClicked
 
     /**
      * @param args the command line arguments
@@ -132,19 +227,23 @@ public class DaftarKasir_Admin extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new DaftarKasir_Admin().setVisible(true);
+                try {
+                    new DaftarKasir_Admin().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(DaftarKasir_Admin.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btnBack;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tableKasir;
     // End of variables declaration//GEN-END:variables
 
 }
