@@ -6,6 +6,9 @@
 package rentalbus;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.control.Alert;
@@ -17,14 +20,18 @@ import javax.swing.JOptionPane;
  * @author Sylvia Putri
  */
 public class Login extends javax.swing.JFrame {
+    KoneksiDB kon = new KoneksiDB();
+    ArrayList<Bus> busList;
     
     static String nama;
     
     /**
      * Creates new form Login
      */
-    public Login() {
+    public Login() throws SQLException {
         initComponents();
+        busList = busList();
+        updateStatusAllBus();
     }
 
     @SuppressWarnings("unchecked")
@@ -114,7 +121,6 @@ public class Login extends javax.swing.JFrame {
             new HomePage_Admin().setVisible(true);
         }
         else{
-            KoneksiDB kon = new KoneksiDB();
             try {
                 kon.connect();
             } catch (SQLException ex) {
@@ -155,10 +161,77 @@ public class Login extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Login().setVisible(true);
+                try {
+                    new Login().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         
+    }
+    
+    public void updateStatusAllBus() throws SQLException{
+        kon.connect();
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dateNow = sdf.format(cal.getTime());
+        for(int i=0; i<busList.size(); i++){
+            kon.createQuery("select * from bookingbus where nopol='"+busList.get(i).getNopol()+"' AND tgl_sewa<= '" + dateNow +"'");
+            //kalau ada, set status jadi "dipinjam"
+            if(kon.myRs.next()){
+                kon.createUpdate("UPDATE `bus` SET `status_sewa` = 'dipinjam' WHERE `bus`.`nopol_bus` = '"+busList.get(i).getNopol()+"' ");
+            }
+        }
+        kon.close();
+    }
+    
+    public ArrayList<JenisBus> jenisBusList() throws SQLException{
+        ArrayList<JenisBus> jenisBusList = new ArrayList<>();
+        try{
+            kon.connect();
+            kon.createQuery("select * from jenis_bus");
+            JenisBus jenisBus;
+            while(kon.myRs.next()){
+                jenisBus = new JenisBus(kon.myRs.getString("id_jenis"), kon.myRs.getString("nama_jenis"), kon.myRs.getInt("harga_sewa"), kon.myRs.getInt("jumlah_disewa"));
+                jenisBusList.add(jenisBus);
+            }
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+        finally{
+            kon.close();
+        }
+        return jenisBusList;
+    }
+    
+    public ArrayList<Bus> busList() throws SQLException{
+        busList = new ArrayList<>();
+        ArrayList<JenisBus> jenisBusList = jenisBusList();
+        try{
+            kon.connect();
+            kon.createQuery("select * from bus");
+            Bus bus;
+            JenisBus jenisBus = null;
+            while(kon.myRs.next()){
+                for(int i=0;i<jenisBusList.size();i++){
+                    if(kon.myRs.getString("jenis_bus").equals(jenisBusList.get(i).getIdJenis())){
+                        jenisBus=jenisBusList.get(i);
+                        break;
+                    }
+                }
+                bus = new Bus(kon.myRs.getString("nopol_bus"), kon.myRs.getString("nama_sopir"), jenisBus, kon.myRs.getString("status_sewa"));
+                busList.add(bus);
+            }
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+        finally{
+            kon.close();
+        }
+        return busList;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
