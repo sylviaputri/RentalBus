@@ -55,13 +55,11 @@
                           </Group>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="comboJenis" pref="147" max="32767" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="txtNopol" pref="147" max="32767" attributes="0"/>
-                                  <Component id="lblStatus" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="lblHarga" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="txtSopir" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="lblBanyakSewa" alignment="0" max="32767" attributes="0"/>
-                              </Group>
+                              <Component id="txtNopol" pref="147" max="32767" attributes="0"/>
+                              <Component id="lblStatus" alignment="0" max="32767" attributes="0"/>
+                              <Component id="lblHarga" alignment="0" max="32767" attributes="0"/>
+                              <Component id="txtSopir" alignment="0" max="32767" attributes="0"/>
+                              <Component id="lblBanyakSewa" alignment="0" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace min="195" pref="195" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -72,7 +70,7 @@
                               <Component id="jLabel9" alignment="1" min="-2" pref="55" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace pref="131" max="32767" attributes="0"/>
-                          <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnHapus" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -142,7 +140,7 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnHapus" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jButton3" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -199,10 +197,13 @@
         <Property name="text" type="java.lang.String" value="Harga sewa/hari"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton2">
+    <Component class="javax.swing.JButton" name="btnHapus">
       <Properties>
         <Property name="text" type="java.lang.String" value="Hapus Bus"/>
       </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnHapusMouseClicked"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jButton3">
       <Properties>

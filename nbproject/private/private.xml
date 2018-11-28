@@ -3,14 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Tugas/UKDW/Semester%205/RPL/Project/RentalBus/src/rentalbus/HomePage_Kasir.java</file>
-            <file>file:/D:/Tugas/UKDW/Semester%205/RPL/Project/RentalBus/src/rentalbus/HomePage_Admin.java</file>
+            <file>file:/D:/Tugas/UKDW/Semester%205/RPL/Project/RentalBus/src/rentalbus/BusPinjam.java</file>
             <file>file:/D:/Tugas/UKDW/Semester%205/RPL/Project/RentalBus/src/rentalbus/Bus.java</file>
-            <file>file:/D:/Tugas/UKDW/Semester%205/RPL/Project/RentalBus/src/rentalbus/JenisBus.java</file>
-            <file>file:/D:/Tugas/UKDW/Semester%205/RPL/Project/RentalBus/src/rentalbus/DetailBus_Kasir.java</file>
+            <file>file:/D:/Tugas/UKDW/Semester%205/RPL/Project/RentalBus/src/rentalbus/TransaksiPeminjaman_Kasir.java</file>
+            <file>file:/D:/Tugas/UKDW/Semester%205/RPL/Project/RentalBus/src/rentalbus/InputBusPinjam_Kasir.java</file>
             <file>file:/D:/Tugas/UKDW/Semester%205/RPL/Project/RentalBus/src/rentalbus/Login.java</file>
-            <file>file:/D:/Tugas/UKDW/Semester%205/RPL/Project/RentalBus/src/rentalbus/DaftarBus_Admin.java</file>
-            <file>file:/D:/Tugas/UKDW/Semester%205/RPL/Project/RentalBus/src/rentalbus/DetailBus_Admin.java</file>
             <file>file:/D:/Tugas/UKDW/Semester%205/RPL/Project/RentalBus/src/rentalbus/DaftarBus_Kasir.java</file>
         </group>
     </open-files>
