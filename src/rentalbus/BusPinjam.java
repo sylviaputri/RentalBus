@@ -17,6 +17,7 @@ public class BusPinjam {
     private String namaSupir;
     private int harga;
     private int subTotal;
+    private int denda;
     
     public BusPinjam(String nopol, String tgPinjam, String tgKembali, JenisBus jenisBus, String namaSupir, int harga, int subTotal){
         this.nopol = nopol;
@@ -28,6 +29,15 @@ public class BusPinjam {
         this.subTotal = subTotal;
     }
     
+    public BusPinjam(String nopol, String tgPinjam, String tgKembali, int subTotal){
+        this.nopol = nopol;
+        this.namaSupir = "";
+        this.jenisBus = null;
+        this.tgPinjam = tgPinjam;
+        this.tgKembali = tgKembali;
+        this.harga = 0;
+        this.subTotal = subTotal;
+    }
     
     
     //getter setter
@@ -85,6 +95,14 @@ public class BusPinjam {
 
     public void setSubTotal(int subTotal) {
         this.subTotal = subTotal;
+    }
+
+    public int getDenda() {
+        return denda;
+    }
+
+    public void setDenda(int denda) {
+        this.denda = denda;
     }
     
 }

@@ -5,19 +5,65 @@
  */
 package rentalbus;
 
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import static rentalbus.TransaksiPeminjaman_Kasir.DATE_FORMAT_NOW;
+import static rentalbus.TransaksiPeminjaman_Kasir.nama;
+
 /**
  *
  * @author Sylvia Putri
  */
 public class TransaksiPengembalian_Kasir extends javax.swing.JFrame {
     static String nama;
+    KoneksiDB kon = new KoneksiDB();
+    public static final String DATE_FORMAT_NOW = "yyyy-MM-dd HH:mm:ss";
+    ArrayList<BusPinjam> busList= new ArrayList<>();
+    DefaultTableModel model;
+    int totalDenda=0;
+    ArrayList<Boolean> checkedList= new ArrayList<>();
+    String cek = "add";
+    String dateNow="";
 
     /**
      * Creates new form TransaksiPengembalian_Kasir
      */
-    public TransaksiPengembalian_Kasir(String nama) {
+    public TransaksiPengembalian_Kasir(String nama) throws SQLException {
         initComponents();
         this.nama = nama;
+        lblKasir.setText(nama);
+        lblNoPengembalian.setText(getNoTransaksi());
+        lblDateNow.setText(getDateNow());
+        lblTransaksiTidakDitemukan.setVisible(false);
+        lblBusSudahKembali.setVisible(false);
+        lblBusBelumPilih.setVisible(false);
+        model = (DefaultTableModel)tablePengembalian.getModel();
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        dateNow = sdf.format(cal.getTime());
+    }
+    
+    public String getNoTransaksi() throws SQLException{
+       String noTransaksi = null;
+       kon.connect();
+       kon.createQuery("select id_pengembalian from transaksi_pengembalian ORDER BY id_pengembalian");
+       while(kon.myRs.next()){
+           noTransaksi = String.valueOf(kon.myRs.getInt("id_pengembalian")+1);
+       }
+       return noTransaksi;
+    }
+    
+    public String getDateNow(){
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
+        return sdf.format(cal.getTime());
     }
 
     /**
@@ -31,36 +77,35 @@ public class TransaksiPengembalian_Kasir extends javax.swing.JFrame {
 
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        btnBack = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        lblNoPengembalian = new javax.swing.JLabel();
+        lblKasir = new javax.swing.JLabel();
+        lblDateNow = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        txtNoPeminjaman = new javax.swing.JTextField();
+        btnNoPeminjamanOk = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablePengembalian = new javax.swing.JTable();
         jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jLabel15 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
+        lblDenda = new javax.swing.JLabel();
+        btnSelesai = new javax.swing.JButton();
         jLabel17 = new javax.swing.JLabel();
+        lblTransaksiTidakDitemukan = new javax.swing.JLabel();
+        lblBusSudahKembali = new javax.swing.JLabel();
+        lblBusBelumPilih = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("Back");
+        btnBack.setText("Back");
+        btnBack.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnBackMouseClicked(evt);
+            }
+        });
 
         jLabel1.setText("Transaksi Pengembalian");
 
@@ -70,172 +115,166 @@ public class TransaksiPengembalian_Kasir extends javax.swing.JFrame {
 
         jLabel4.setText("Tanggal & waktu");
 
-        jLabel5.setText("7326423");
+        lblNoPengembalian.setText("7326423");
 
-        jLabel6.setText("Budi");
+        lblKasir.setText("Budi");
 
-        jLabel7.setText("30-12-2018 12:23:22");
+        lblDateNow.setText("30-12-2018 12:23:22");
 
         jLabel8.setText("No Transaksi Peminjaman");
 
-        jButton2.setText("OK");
+        btnNoPeminjamanOk.setText("OK");
+        btnNoPeminjamanOk.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnNoPeminjamanOkMouseClicked(evt);
+            }
+        });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jScrollPane1.setBorder(null);
+
+        tablePengembalian.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Pilih", "Nopol", "Tgl Pinjam", "Tgl Wajib Kembali", "Denda", "Biaya Parkir", "Biaya Tol", "Biaya BBM"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                true, false, false, false, false, true, true, true
+            };
 
-        jLabel9.setText("Denda");
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
-        jLabel10.setText("340.000");
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tablePengembalian.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablePengembalianMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tablePengembalian);
+        if (tablePengembalian.getColumnModel().getColumnCount() > 0) {
+            tablePengembalian.getColumnModel().getColumn(0).setMinWidth(50);
+            tablePengembalian.getColumnModel().getColumn(0).setPreferredWidth(50);
+            tablePengembalian.getColumnModel().getColumn(0).setMaxWidth(50);
+        }
 
-        jLabel11.setText("Cost");
+        jLabel9.setText("Denda (Rp)");
 
-        jLabel12.setText("Parkir");
+        lblDenda.setText("0");
 
-        jLabel13.setText("BBM");
-
-        jLabel14.setText("Tol");
-
-        jLabel15.setText("Total kekurangan");
-
-        jLabel16.setText("530.000");
-
-        jButton3.setText("OK");
+        btnSelesai.setText("Selesai");
+        btnSelesai.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSelesaiMouseClicked(evt);
+            }
+        });
 
         jLabel17.setText("Daftar bus yang belum dikembalikan :");
+
+        lblTransaksiTidakDitemukan.setForeground(new java.awt.Color(204, 0, 0));
+        lblTransaksiTidakDitemukan.setText("Nomor transaksi tidak ditemukan");
+
+        lblBusSudahKembali.setForeground(new java.awt.Color(204, 0, 0));
+        lblBusSudahKembali.setText("Semua bus sudah dikembalikan");
+
+        lblBusBelumPilih.setForeground(new java.awt.Color(204, 0, 0));
+        lblBusBelumPilih.setText("Belum ada bus yang dipilih");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jButton1)
-                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton3)))
-                .addGap(27, 27, 27))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnSelesai)
+                .addGap(195, 195, 195))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(422, 422, 422)
+                        .addComponent(btnBack)
+                        .addGap(345, 345, 345)
                         .addComponent(jLabel1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField1))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4))
-                                .addGap(29, 29, 29)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel5))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton2))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblDateNow)
+                                    .addComponent(lblKasir)
+                                    .addComponent(lblNoPengembalian)
+                                    .addComponent(txtNoPeminjaman, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addComponent(btnNoPeminjamanOk)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(lblTransaksiTidakDitemukan))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel9)
                                 .addGap(18, 18, 18)
-                                .addComponent(jLabel10))
-                            .addComponent(jLabel11)
+                                .addComponent(lblDenda, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel14)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel13)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel12)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel15)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel16))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel17)))
-                .addContainerGap(374, Short.MAX_VALUE))
+                                .addComponent(jLabel17)
+                                .addGap(26, 26, 26)
+                                .addComponent(lblBusSudahKembali))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 867, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblBusBelumPilih))))
+                .addContainerGap(154, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel1)
-                .addGap(29, 29, 29)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnBack)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(jLabel1)))
+                .addGap(26, 26, 26)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel5))
+                    .addComponent(lblNoPengembalian))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel6))
+                    .addComponent(lblKasir))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jLabel7))
-                .addGap(27, 27, 27)
+                    .addComponent(lblDateNow))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
-                .addGap(21, 21, 21)
-                .addComponent(jLabel17)
+                    .addComponent(txtNoPeminjaman, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnNoPeminjamanOk)
+                    .addComponent(lblTransaksiTidakDitemukan))
+                .addGap(30, 30, 30)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel17)
+                    .addComponent(lblBusSudahKembali))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblBusBelumPilih)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
-                    .addComponent(jLabel10))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel12)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel14))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel15)
-                    .addComponent(jLabel16))
-                .addGap(18, 18, 18)
-                .addComponent(jButton3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lblDenda))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnSelesai)
+                .addContainerGap(288, Short.MAX_VALUE))
         );
 
         jScrollPane2.setViewportView(jPanel1);
@@ -249,13 +288,232 @@ public class TransaksiPengembalian_Kasir extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnBackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackMouseClicked
+        this.setVisible(false);
+        new HomePage_Kasir(nama).setVisible(true);
+    }//GEN-LAST:event_btnBackMouseClicked
+
+    private void btnNoPeminjamanOkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNoPeminjamanOkMouseClicked
+        checkedList.clear();
+        busList.clear();
+        totalDenda=0;
+        lblDenda.setText("0");
+        lblBusBelumPilih.setVisible(false);
+        try {
+            lblNoPengembalian.setText(getNoTransaksi());
+            cek = "add";
+        } catch (SQLException ex) {
+            Logger.getLogger(TransaksiPengembalian_Kasir.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        int tableSize = model.getRowCount();
+        for (int i = tableSize - 1; i >= 0; i--) {
+            model.removeRow(i);
+        }
+        if(txtNoPeminjaman.getText().isEmpty())
+            lblTransaksiTidakDitemukan.setVisible(true);
+        else{
+            try {
+                kon.connect();
+            } catch (SQLException ex) {
+                Logger.getLogger(TransaksiPengembalian_Kasir.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                kon.createQuery("select * from transaksi_peminjaman where id_peminjaman='"+txtNoPeminjaman.getText().toString()+"'");
+            } catch (SQLException ex) {
+                Logger.getLogger(TransaksiPengembalian_Kasir.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                //kalau transaksi ditemukan
+                if(kon.myRs.next()){
+                    lblTransaksiTidakDitemukan.setVisible(false);
+                    int allInOne = kon.myRs.getInt("allInOne");
+                    if(allInOne==1) //kalau allInOne
+                        createTableAllInOne();
+                    else //kalau tidak allInOne
+                        createTableNotAllInOne();
+                    setDataBusMasihDipinjam();
+                    showToTable();
+                    if(busList.size()==0) lblBusSudahKembali.setVisible(true);
+                    else lblBusSudahKembali.setVisible(false);
+                    kon.createQuery("SELECT * from transaksi_pengembalian WHERE id_peminjaman='"+txtNoPeminjaman.getText().toString()+"'");
+                    if(kon.myRs.next()){
+                         lblNoPengembalian.setText(String.valueOf(kon.myRs.getInt("id_pengembalian")));
+                         cek = "update";
+                    }
+                }
+                else{
+                    lblTransaksiTidakDitemukan.setVisible(true);
+                    lblBusSudahKembali.setVisible(false);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(TransaksiPengembalian_Kasir.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                kon.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(TransaksiPengembalian_Kasir.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnNoPeminjamanOkMouseClicked
+
+    //button SELESAI di klik
+    private void btnSelesaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSelesaiMouseClicked
+
+        //MASIH OTW
+        int kosong=1;
+        for(int i=0; i< model.getRowCount(); i++){
+            if(checkedList.get(i)==true){
+                kosong=0;
+            }
+        }
+        if(kosong==0){
+            lblBusBelumPilih.setVisible(false);
+            try {
+                kon.connect();
+            } catch (SQLException ex) {
+                Logger.getLogger(TransaksiPengembalian_Kasir.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            int id_kasir =0;
+            if(cek.equals("add")){
+                try {
+                    kon.createQuery("Select id_kasir from kasir where nama_kasir='"+lblKasir.getText().toString()+"'");
+                } catch (SQLException ex) {
+                    Logger.getLogger(TransaksiPengembalian_Kasir.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    while(kon.myRs.next())
+                        id_kasir = kon.myRs.getInt("id_kasir");
+                } catch (SQLException ex) {
+                    Logger.getLogger(TransaksiPengembalian_Kasir.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    kon.createInsert("INSERT INTO `transaksi_pengembalian` VALUES ("+Integer.valueOf(lblNoPengembalian.getText().toString())+", '"+dateNow+"', "+id_kasir+", "+Integer.valueOf(lblDenda.getText().toString())+", "+Integer.valueOf(txtNoPeminjaman.getText().toString())+")");
+                } catch (SQLException ex) {
+                    Logger.getLogger(TransaksiPengembalian_Kasir.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            else if(cek.equals("update")){
+                try {
+                    kon.createUpdate("UPDATE `transaksi_pengembalian` SET `tgl_transaksi` = '"+dateNow+"', `total_denda` = "+Integer.valueOf(lblDenda.getText().toString())+" WHERE `transaksi_pengembalian`.`id_pengembalian` = "+Integer.valueOf(lblNoPengembalian.getText().toString())+" ");
+                } catch (SQLException ex) {
+                    Logger.getLogger(TransaksiPengembalian_Kasir.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+            for(int i=0; i< model.getRowCount(); i++){
+                if(checkedList.get(i)==true){
+                    try {
+                        kon.createUpdate("DELETE FROM `bookingbus` WHERE `bookingbus`.`nopol` = '"+busList.get(i).getNopol()+"' AND `bookingbus`.`tgl_sewa`='"+busList.get(i).getTgPinjam()+"'");
+                        kon.createUpdate("UPDATE `bus` SET `status_sewa` = 'tersedia' WHERE `bus`.`nopol_bus` = '"+busList.get(i).getNopol()+"' ");
+                    } catch (SQLException ex) {
+                        Logger.getLogger(TransaksiPengembalian_Kasir.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                                        try {
+                        int noDetail=getNoDetailPengembalian();
+                        kon.createInsert("INSERT INTO `detail_pengembalian` VALUES ("+noDetail+", '"+busList.get(i).getNopol()+"', "+busList.get(i).getDenda()+", "+Integer.valueOf(lblNoPengembalian.getText().toString())+")");
+                        if(model.getColumnCount()==8){
+                            kon.createInsert("INSERT INTO `cost` VALUES (NULL, "+noDetail+", "+model.getValueAt(i, 5)+", "+model.getValueAt(i, 6)+", "+model.getValueAt(i, 7)+")");
+                        }
+                    } catch (SQLException ex) {
+                        Logger.getLogger(TransaksiPengembalian_Kasir.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+            try {
+                kon.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(TransaksiPengembalian_Kasir.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            //balik ke homepage lagi
+            this.setVisible(false);
+            new HomePage_Kasir(nama).setVisible(true);
+            JOptionPane.showMessageDialog(null, "Pengembalian berhasil", "", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else{
+            lblBusBelumPilih.setVisible(true);
+        }
+    }//GEN-LAST:event_btnSelesaiMouseClicked
+
+    public int getNoDetailPengembalian() throws SQLException{
+       int noTransaksiDetail = 0;
+       kon.connect();
+       kon.createQuery("select id_detail_pengembalian from detail_pengembalian ORDER BY id_detail_pengembalian");
+       while(kon.myRs.next()){
+           noTransaksiDetail = kon.myRs.getInt("id_detail_pengembalian")+1;
+       }
+        return noTransaksiDetail;
+    }
+    
+    private void tablePengembalianMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablePengembalianMouseClicked
+        int index = tablePengembalian.getSelectedRow();
+        Boolean checked = (Boolean) model.getValueAt(index, 0);
+        if(checked != checkedList.get(index)){
+            if(checked == true)
+                totalDenda+=busList.get(index).getDenda();
+            else
+                totalDenda-=busList.get(index).getDenda();
+            lblDenda.setText(String.valueOf(totalDenda));
+            checkedList.set(index, !checkedList.get(index));
+        }
+    }//GEN-LAST:event_tablePengembalianMouseClicked
+
+    public void showToTable(){
+        Object[] row = new Object[5];
+        for(int i=0;i<busList.size();i++){
+            row[1] = busList.get(i).getNopol();
+            row[2] = busList.get(i).getTgPinjam();
+            row[3] = busList.get(i).getTgKembali();
+            row[4] = busList.get(i).getDenda();
+            model.addRow(row);
+            checkedList.add(false);
+        }
+    }
+    
+    public void setDataBusMasihDipinjam() throws SQLException{
+        kon.connect();
+        kon.createQuery("SELECT detail_peminjaman.* FROM `detail_peminjaman`, bookingbus WHERE id_peminjaman='"+txtNoPeminjaman.getText().toString()+"' AND detail_peminjaman.nopol_bus=bookingbus.nopol AND detail_peminjaman.tgl_sewa=bookingbus.tgl_sewa");
+        BusPinjam busPinjam;
+        while(kon.myRs.next()){
+            busPinjam = new BusPinjam(kon.myRs.getString("nopol_bus"), kon.myRs.getString("tgl_sewa"), kon.myRs.getString("tgl_kembali"), kon.myRs.getInt("harga_sewa"));
+            busList.add(busPinjam);
+        }
+        for(int i=0; i<busList.size(); i++){
+            kon.createQuery("select datediff('"+busList.get(i).getTgKembali()+"','"+busList.get(i).getTgPinjam()+"') as selisih");
+            while(kon.myRs.next()){
+                int selisih = kon.myRs.getInt("selisih")+1;
+                int harga = busList.get(i).getSubTotal()/selisih;
+                busList.get(i).setHarga(harga);
+            }
+            
+            kon.createQuery("select datediff('"+dateNow+"','"+busList.get(i).getTgKembali()+"') as selisih");
+            while(kon.myRs.next()){
+                int selisih = kon.myRs.getInt("selisih");
+                if (selisih<0) selisih=0;
+                int denda = busList.get(i).getHarga() * selisih;
+                busList.get(i).setDenda(denda);   
+            }
+        }
+    }
+    
+    public void createTableNotAllInOne(){
+        model.setColumnCount(5);
+    }
+    
+    public void createTableAllInOne(){
+        if(model.getColumnCount()==5){
+            model.addColumn("Biaya Parkir");
+            model.addColumn("Biaya Tol");
+            model.addColumn("Biaya BBM");
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -286,39 +544,37 @@ public class TransaksiPengembalian_Kasir extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TransaksiPengembalian_Kasir(nama).setVisible(true);
+                try {
+                    new TransaksiPengembalian_Kasir(nama).setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(TransaksiPengembalian_Kasir.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnNoPeminjamanOk;
+    private javax.swing.JButton btnSelesai;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JLabel lblBusBelumPilih;
+    private javax.swing.JLabel lblBusSudahKembali;
+    private javax.swing.JLabel lblDateNow;
+    private javax.swing.JLabel lblDenda;
+    private javax.swing.JLabel lblKasir;
+    private javax.swing.JLabel lblNoPengembalian;
+    private javax.swing.JLabel lblTransaksiTidakDitemukan;
+    private javax.swing.JTable tablePengembalian;
+    private javax.swing.JTextField txtNoPeminjaman;
     // End of variables declaration//GEN-END:variables
 }
