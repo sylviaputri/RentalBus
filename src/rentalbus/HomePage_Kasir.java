@@ -109,7 +109,11 @@ public class HomePage_Kasir extends javax.swing.JFrame {
     private void btnPeminjamanBusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPeminjamanBusMouseClicked
         //pindah ke halaman PEMINJAMAN
         this.setVisible(false);
-        new TransaksiPeminjaman_Kasir(nama).setVisible(true);
+        try {
+            new TransaksiPeminjaman_Kasir(nama).setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(HomePage_Kasir.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnPeminjamanBusMouseClicked
 
     private void btnPengembalianBusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPengembalianBusMouseClicked

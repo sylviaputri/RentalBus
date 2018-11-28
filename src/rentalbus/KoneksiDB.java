@@ -15,6 +15,7 @@ public class KoneksiDB {
     Connection myConn = null;
     Statement myStmt = null;
     ResultSet myRs = null;   
+    PreparedStatement preparedStmt = null;
     
     public void connect() throws SQLException{
         try{
@@ -39,6 +40,15 @@ public class KoneksiDB {
     
     public void createQuery(String query) throws SQLException{
         myRs = myStmt.executeQuery(query);
+    }
+    
+    public void createInsert(String query) throws SQLException{
+        myStmt.executeUpdate(query);
+    }
+    
+    public void createUpdate(String query) throws SQLException{
+        preparedStmt = myConn.prepareStatement(query);
+        preparedStmt.executeUpdate();
     }
     /*
     public static void main(String[] args) throws SQLException{
