@@ -40,7 +40,7 @@ public class DetailJenisBus_Admin extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        btnHapus = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
         txtNamaJenis = new javax.swing.JTextField();
         txtHargaSewa = new javax.swing.JTextField();
@@ -68,7 +68,12 @@ public class DetailJenisBus_Admin extends javax.swing.JFrame {
 
         jLabel5.setText("Harga sewa/hari");
 
-        jButton2.setText("Hapus Jenis Bus");
+        btnHapus.setText("Hapus Jenis Bus");
+        btnHapus.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnHapusMouseClicked(evt);
+            }
+        });
 
         btnSave.setText("Save");
         btnSave.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -117,7 +122,7 @@ public class DetailJenisBus_Admin extends javax.swing.JFrame {
                                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
-                                .addComponent(jButton2)
+                                .addComponent(btnHapus)
                                 .addGap(18, 18, 18)
                                 .addComponent(btnSave))))
                     .addGroup(layout.createSequentialGroup()
@@ -166,7 +171,7 @@ public class DetailJenisBus_Admin extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel9))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jButton2)
+                                .addComponent(btnHapus)
                                 .addComponent(btnSave)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel12))
@@ -257,6 +262,34 @@ public class DetailJenisBus_Admin extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnSaveMouseClicked
 
+    //button HAPUS di klik
+    private void btnHapusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHapusMouseClicked
+        try {
+            kon.connect();
+        } catch (SQLException ex) {
+            Logger.getLogger(DetailBus_Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            kon.createUpdate("DELETE FROM `jenis_bus` WHERE id_jenis = '"+lblIdJenis.getText().toString()+"'");
+        } catch (SQLException ex) {
+            Logger.getLogger(DetailBus_Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            kon.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DetailBus_Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        this.setVisible(false);
+        try {
+            new DaftarJenisBus_Admin().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(DetailBus_Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        JOptionPane.showMessageDialog(null, "Penghapusan berhasil", "", JOptionPane.INFORMATION_MESSAGE);
+        
+    }//GEN-LAST:event_btnHapusMouseClicked
+
     public boolean isNumeric(String s) {  
         return s != null && s.matches("[-+]?\\d*\\.?\\d+");  
     }  
@@ -298,8 +331,8 @@ public class DetailJenisBus_Admin extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnSave;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;

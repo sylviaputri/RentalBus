@@ -38,7 +38,7 @@ public class DetailKasir_Admin extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        btnHapus = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
         txtNama = new javax.swing.JTextField();
         txtUsername = new javax.swing.JTextField();
@@ -72,7 +72,12 @@ public class DetailKasir_Admin extends javax.swing.JFrame {
 
         jLabel5.setText("No KTP");
 
-        jButton2.setText("Hapus Kasir");
+        btnHapus.setText("Hapus Kasir");
+        btnHapus.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnHapusMouseClicked(evt);
+            }
+        });
 
         btnSave.setText("Save");
         btnSave.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -153,7 +158,7 @@ public class DetailKasir_Admin extends javax.swing.JFrame {
                 .addGap(85, 85, 85))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2)
+                .addComponent(btnHapus)
                 .addGap(18, 18, 18)
                 .addComponent(btnSave)
                 .addGap(42, 42, 42))
@@ -217,7 +222,7 @@ public class DetailKasir_Admin extends javax.swing.JFrame {
                     .addComponent(txtConfirmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
+                    .addComponent(btnHapus)
                     .addComponent(btnSave))
                 .addGap(23, 23, 23))
         );
@@ -297,6 +302,33 @@ public class DetailKasir_Admin extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnSaveMouseClicked
 
+    //button HAPUS di klik
+    private void btnHapusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHapusMouseClicked
+        try {
+            kon.connect();
+        } catch (SQLException ex) {
+            Logger.getLogger(DetailBus_Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            kon.createUpdate("DELETE FROM `kasir` WHERE id_kasir = "+Integer.valueOf(lblIdKasir.getText().toString())+" ");
+        } catch (SQLException ex) {
+            Logger.getLogger(DetailBus_Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            kon.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DetailBus_Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        this.setVisible(false);
+        try {
+            new DaftarKasir_Admin().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(DetailBus_Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        JOptionPane.showMessageDialog(null, "Penghapusan berhasil", "", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_btnHapusMouseClicked
+
     public boolean isNumeric(String s) {  
         return s != null && s.matches("[-+]?\\d*\\.?\\d+");  
     }  
@@ -338,8 +370,8 @@ public class DetailKasir_Admin extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnSave;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
