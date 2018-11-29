@@ -100,7 +100,7 @@ public class DaftarBus_Admin extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
+        btnTambahBus = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         comboSearch = new javax.swing.JComboBox<>();
         txtSearch = new javax.swing.JTextField();
@@ -153,7 +153,12 @@ public class DaftarBus_Admin extends javax.swing.JFrame {
 
         jLabel4.setText("Advanced search by");
 
-        jButton3.setText("Tambah Bus");
+        btnTambahBus.setText("Tambah Bus");
+        btnTambahBus.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnTambahBusMouseClicked(evt);
+            }
+        });
 
         jButton2.setText("Back");
         jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -197,7 +202,7 @@ public class DaftarBus_Admin extends javax.swing.JFrame {
                                     .addComponent(txtSearch)
                                     .addComponent(txtAdvancedSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(397, 397, 397)
-                                .addComponent(jButton3))
+                                .addComponent(btnTambahBus))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 843, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnSearch))))
                 .addContainerGap(47, Short.MAX_VALUE))
@@ -212,7 +217,7 @@ public class DaftarBus_Admin extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(38, 38, 38)
-                        .addComponent(jButton3)
+                        .addComponent(btnTambahBus)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
@@ -274,7 +279,7 @@ public class DaftarBus_Admin extends javax.swing.JFrame {
         this.setVisible(false);
         detailBus.pack();
         detailBus.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        detailBus.txtNopol.setText(bus.getNopol());
+        detailBus.lblNopol.setText(bus.getNopol());
         detailBus.lblBanyakSewa.setText(String.valueOf(bus.getJenisBus().getJumlahDisewa())+" kali");
         detailBus.lblHarga.setText("Rp "+String.valueOf(bus.getJenisBus().getHargaSewa()));
         detailBus.txtSopir.setText(bus.getNamaSupir());
@@ -301,6 +306,16 @@ public class DaftarBus_Admin extends javax.swing.JFrame {
         }
         show_bus(list);
     }//GEN-LAST:event_btnSearchMouseClicked
+
+    //klik button TAMBAH BUS
+    private void btnTambahBusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTambahBusMouseClicked
+        this.setVisible(false);
+        try {
+            new TambahBus_Admin().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(DaftarBus_Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnTambahBusMouseClicked
 
     //Menampilkan data BUS kedalam TABEL
     public void show_bus(ArrayList<Bus> list){
@@ -407,11 +422,11 @@ public class DaftarBus_Admin extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSearch;
+    private javax.swing.JButton btnTambahBus;
     private javax.swing.JComboBox<String> comboAdvancedSearch;
     private javax.swing.JComboBox<String> comboSearch;
     private javax.swing.JComboBox<String> comboSorting;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -476,6 +476,23 @@ public class TransaksiPeminjaman_Kasir extends javax.swing.JFrame {
                     Logger.getLogger(TransaksiPeminjaman_Kasir.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+            //tambahan cek langsung
+            for(int i=0; i<busList.size(); i++){
+                try {
+                    kon.createQuery("select * from bookingbus where nopol='"+busList.get(i).getNopol()+"' AND tgl_sewa<= '" + dateNow +"'");
+                } catch (SQLException ex) {
+                    Logger.getLogger(TransaksiPeminjaman_Kasir.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    //kalau ada, set status jadi "dipinjam"
+                    if(kon.myRs.next()){
+                        kon.createUpdate("UPDATE `bus` SET `status_sewa` = 'dipinjam' WHERE `bus`.`nopol_bus` = '"+busList.get(i).getNopol()+"' ");
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(TransaksiPeminjaman_Kasir.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            //--------
             try {
                 kon.close();
             } catch (SQLException ex) {

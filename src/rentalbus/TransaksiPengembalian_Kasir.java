@@ -365,8 +365,6 @@ public class TransaksiPengembalian_Kasir extends javax.swing.JFrame {
 
     //button SELESAI di klik
     private void btnSelesaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSelesaiMouseClicked
-
-        //MASIH OTW
         int kosong=1;
         for(int i=0; i< model.getRowCount(); i++){
             if(checkedList.get(i)==true){
