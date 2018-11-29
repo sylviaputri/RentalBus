@@ -77,7 +77,7 @@ public class DaftarJenisBus_Admin extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tableJenisBus = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
+        btnTambahJenis = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -111,7 +111,12 @@ public class DaftarJenisBus_Admin extends javax.swing.JFrame {
 
         jLabel1.setText("Daftar Jenis Bus");
 
-        jButton3.setText("Tambah Jenis Bus");
+        btnTambahJenis.setText("Tambah Jenis Bus");
+        btnTambahJenis.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnTambahJenisMouseClicked(evt);
+            }
+        });
 
         btnBack.setText("Back");
         btnBack.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -135,7 +140,7 @@ public class DaftarJenisBus_Admin extends javax.swing.JFrame {
                             .addComponent(jLabel1))
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addGap(698, 698, 698)
-                            .addComponent(jButton3))))
+                            .addComponent(btnTambahJenis))))
                 .addContainerGap(105, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -146,7 +151,7 @@ public class DaftarJenisBus_Admin extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(btnBack))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 152, Short.MAX_VALUE)
-                .addComponent(jButton3)
+                .addComponent(btnTambahJenis)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(99, 99, 99))
@@ -192,9 +197,14 @@ public class DaftarJenisBus_Admin extends javax.swing.JFrame {
         detailJenisBus.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         detailJenisBus.lblIdJenis.setText(jenisBus.getIdJenis());
         detailJenisBus.txtNamaJenis.setText(jenisBus.getNamaJenis());
-        detailJenisBus.txtHargaSewa.setText("Rp "+String.valueOf(jenisBus.getHargaSewa()));
+        detailJenisBus.txtHargaSewa.setText(String.valueOf(jenisBus.getHargaSewa()));
         detailJenisBus.lblBanyakSewa.setText(String.valueOf(jenisBus.getJumlahDisewa()) + " kali");
     }//GEN-LAST:event_tableJenisBusMouseClicked
+
+    private void btnTambahJenisMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTambahJenisMouseClicked
+        this.setVisible(false);
+        new TambahJenisBus_Admin().setVisible(true);
+    }//GEN-LAST:event_btnTambahJenisMouseClicked
 
     /**
      * @param args the command line arguments
@@ -237,7 +247,7 @@ public class DaftarJenisBus_Admin extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton btnTambahJenis;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

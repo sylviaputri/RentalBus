@@ -8,18 +8,18 @@ package rentalbus;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Sylvia Putri
  */
 public class DetailJenisBus_Admin extends javax.swing.JFrame {
+    KoneksiDB kon = new KoneksiDB();
 
-    /**
-     * Creates new form DetailJenisBus_Admin
-     */
     public DetailJenisBus_Admin() {
         initComponents();
+        lblDataTidakLengkap.setVisible(false);
     }
 
     /**
@@ -41,11 +41,13 @@ public class DetailJenisBus_Admin extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
         txtNamaJenis = new javax.swing.JTextField();
         txtHargaSewa = new javax.swing.JTextField();
         lblBanyakSewa = new javax.swing.JLabel();
         lblIdJenis = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        lblDataTidakLengkap = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -68,7 +70,12 @@ public class DetailJenisBus_Admin extends javax.swing.JFrame {
 
         jButton2.setText("Hapus Jenis Bus");
 
-        jButton3.setText("Save");
+        btnSave.setText("Save");
+        btnSave.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSaveMouseClicked(evt);
+            }
+        });
 
         txtNamaJenis.setText("Big Bus");
         txtNamaJenis.addActionListener(new java.awt.event.ActionListener() {
@@ -88,6 +95,11 @@ public class DetailJenisBus_Admin extends javax.swing.JFrame {
 
         lblIdJenis.setText("JN004");
 
+        jLabel1.setText("Rp");
+
+        lblDataTidakLengkap.setForeground(new java.awt.Color(204, 0, 0));
+        lblDataTidakLengkap.setText("Data harus lengkap");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -97,38 +109,48 @@ public class DetailJenisBus_Admin extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnBack)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(546, 546, 546)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 105, Short.MAX_VALUE)
-                                .addComponent(jButton2))
-                            .addComponent(btnBack))
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton3))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
+                                .addComponent(jButton2)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnSave))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(412, 412, 412)
-                        .addComponent(jLabel2)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(jLabel2)))
+                .addGap(41, 41, 41))
             .addGroup(layout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblDataTidakLengkap)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5))
-                        .addGap(122, 122, 122)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lblIdJenis, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtNamaJenis)
-                            .addComponent(txtHargaSewa, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
-                            .addComponent(lblBanyakSewa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jLabel8))
-                .addContainerGap(578, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel3)
+                                            .addComponent(jLabel4))
+                                        .addGap(122, 122, 122))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel5)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(lblIdJenis, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtNamaJenis)
+                                    .addComponent(txtHargaSewa, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
+                                    .addComponent(lblBanyakSewa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jLabel8))
+                        .addContainerGap(599, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -138,14 +160,21 @@ public class DetailJenisBus_Admin extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel10)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel9)
-                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel10)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel9))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jButton2)
+                                .addComponent(btnSave)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel12))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel2)
-                        .addGap(85, 85, 85)
+                        .addGap(53, 53, 53)
+                        .addComponent(lblDataTidakLengkap)
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
                             .addComponent(lblIdJenis))
@@ -156,18 +185,14 @@ public class DetailJenisBus_Admin extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtHargaSewa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel1))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8)
                             .addComponent(lblBanyakSewa))
                         .addGap(163, 163, 163)))
                 .addGap(40, 40, 40))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)))
         );
 
         pack();
@@ -190,6 +215,52 @@ public class DetailJenisBus_Admin extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnBackMouseClicked
 
+    private void btnSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSaveMouseClicked
+        if(txtNamaJenis.getText().toString().equals("") || txtHargaSewa.getText().toString().equals("")){
+            lblDataTidakLengkap.setVisible(true);
+        }
+        else{
+            try {
+                kon.connect();
+            } catch (SQLException ex) {
+                Logger.getLogger(DetailJenisBus_Admin.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            lblDataTidakLengkap.setVisible(false);
+            if(!isNumeric(txtHargaSewa.getText().toString()))
+                JOptionPane.showMessageDialog(null, "Harga sewa harus berupa angka", "", JOptionPane.ERROR_MESSAGE);
+            else if(Integer.valueOf(txtHargaSewa.getText().toString())<100000)
+                JOptionPane.showMessageDialog(null, "Harga harus lebih dari Rp 100.000", "", JOptionPane.ERROR_MESSAGE);
+            else{
+                try {
+                    kon.createQuery("select * from jenis_bus where nama_jenis='"+txtNamaJenis.getText().toString()+"' and id_jenis!='"+lblIdJenis.getText().toString()+"'");
+                } catch (SQLException ex) {
+                    Logger.getLogger(DetailJenisBus_Admin.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    if(kon.myRs.next()){
+                        JOptionPane.showMessageDialog(null, "Nama jenis bus sudah ada di DB", "", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    kon.createUpdate("UPDATE `jenis_bus` SET `nama_jenis` = '"+txtNamaJenis.getText().toString()+"', `harga_sewa` = "+Integer.valueOf(txtHargaSewa.getText().toString())+" WHERE `jenis_bus`.`id_jenis` = '"+lblIdJenis.getText().toString()+"' ");
+                    this.setVisible(false);
+                    new DaftarJenisBus_Admin().setVisible(true);
+                    JOptionPane.showMessageDialog(null, "Pengubahan berhasil", "", JOptionPane.INFORMATION_MESSAGE);
+                } catch (SQLException ex) {
+                    Logger.getLogger(DetailJenisBus_Admin.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            try {
+                kon.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(DetailJenisBus_Admin.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnSaveMouseClicked
+
+    public boolean isNumeric(String s) {  
+        return s != null && s.matches("[-+]?\\d*\\.?\\d+");  
+    }  
+    
     /**
      * @param args the command line arguments
      */
@@ -227,8 +298,9 @@ public class DetailJenisBus_Admin extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnSave;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
@@ -238,6 +310,7 @@ public class DetailJenisBus_Admin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     public javax.swing.JLabel lblBanyakSewa;
+    private javax.swing.JLabel lblDataTidakLengkap;
     public javax.swing.JLabel lblIdJenis;
     public javax.swing.JTextField txtHargaSewa;
     public javax.swing.JTextField txtNamaJenis;

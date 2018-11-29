@@ -78,7 +78,7 @@ public class DaftarKasir_Admin extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tableKasir = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
+        btnTambahKasir = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -112,7 +112,12 @@ public class DaftarKasir_Admin extends javax.swing.JFrame {
 
         jLabel1.setText("Daftar Kasir");
 
-        jButton3.setText("Tambah Kasir");
+        btnTambahKasir.setText("Tambah Kasir");
+        btnTambahKasir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnTambahKasirMouseClicked(evt);
+            }
+        });
 
         btnBack.setText("Back");
         btnBack.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -127,7 +132,7 @@ public class DaftarKasir_Admin extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton3)
+                    .addComponent(btnTambahKasir)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addContainerGap()
@@ -147,7 +152,7 @@ public class DaftarKasir_Admin extends javax.swing.JFrame {
                     .addComponent(btnBack)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 152, Short.MAX_VALUE)
-                .addComponent(jButton3)
+                .addComponent(btnTambahKasir)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(24, 24, 24))
@@ -197,6 +202,16 @@ public class DaftarKasir_Admin extends javax.swing.JFrame {
         detailKasir.txtUsername.setText(kasir.getUsernameKasir());
     }//GEN-LAST:event_tableKasirMouseClicked
 
+    //button TAMBAH di klik
+    private void btnTambahKasirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTambahKasirMouseClicked
+        this.setVisible(false);
+        try {
+            new TambahKasir_Admin().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(DaftarKasir_Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnTambahKasirMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -238,7 +253,7 @@ public class DaftarKasir_Admin extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton btnTambahKasir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
