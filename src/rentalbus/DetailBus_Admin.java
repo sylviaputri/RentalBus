@@ -241,8 +241,32 @@ public class DetailBus_Admin extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnBackMouseClicked
 
+    //button HAPUS di klik
     private void btnHapusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHapusMouseClicked
-        // TODO add your handling code here:
+        try {
+            kon.connect();
+        } catch (SQLException ex) {
+            Logger.getLogger(DetailBus_Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            kon.createUpdate("DELETE FROM `bus` WHERE nopol_bus = '"+lblNopol.getText().toString()+"'");
+        } catch (SQLException ex) {
+            Logger.getLogger(DetailBus_Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            kon.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DetailBus_Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        this.setVisible(false);
+        try {
+            new DaftarBus_Admin().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(DetailBus_Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        JOptionPane.showMessageDialog(null, "Penghapusan berhasil", "", JOptionPane.INFORMATION_MESSAGE);
+        
     }//GEN-LAST:event_btnHapusMouseClicked
 
     

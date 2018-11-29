@@ -5,17 +5,99 @@
  */
 package rentalbus;
 
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
+import static rentalbus.TransaksiPeminjaman_Kasir.DATE_FORMAT_NOW;
+
 /**
  *
  * @author Sylvia Putri
  */
 public class Dashboard_Admin extends javax.swing.JFrame {
-
-    /**
-     * Creates new form Dashboard_Admin
-     */
-    public Dashboard_Admin() {
+    KoneksiDB kon = new KoneksiDB();
+    private String dateNow="";
+    private String monthNow="";
+    
+    public Dashboard_Admin() throws SQLException {
         initComponents();
+        dateNow = getDateNow();
+        monthNow= getMonthNow();
+        lblTransDay.setText(String.valueOf(setLblTransDay()));
+        lblTransMonth.setText(String.valueOf(setLblTransMonth()));
+        lblProfitDay.setText("Rp " + String.valueOf(setLblProfitDay()));
+        lblProfitMonth.setText("Rp " + String.valueOf(setLblProfitMonth()));
+        updateBusPopuler();
+    }
+    
+    public int setLblTransDay() throws SQLException{
+        int total =0;
+        kon.connect();
+        kon.createQuery("select * from transaksi_peminjaman where tgl_transaksi ='"+dateNow+"'");
+        while(kon.myRs.next()) total++;
+        kon.createQuery("select * from transaksi_pengembalian where tgl_transaksi ='"+dateNow+"'");
+        while(kon.myRs.next()) total++;
+        kon.close();
+        return total;
+    }
+    
+    public int setLblTransMonth() throws SQLException{
+        int total =0;
+        kon.connect();
+        kon.createQuery("select * from transaksi_peminjaman where month(tgl_transaksi) ='"+monthNow+"'");
+        while(kon.myRs.next()) total++;
+        kon.createQuery("select * from transaksi_pengembalian where month(tgl_transaksi) ='"+monthNow+"'");
+        while(kon.myRs.next()) total++;
+        kon.close();
+        return total;
+    }
+    
+    public int setLblProfitDay() throws SQLException{
+        int profit=0;
+        kon.connect();
+        kon.createQuery("select total_harga from transaksi_peminjaman where tgl_transaksi ='"+dateNow+"'");
+        while(kon.myRs.next()) profit+=kon.myRs.getInt("total_harga");
+        kon.createQuery("SELECT sum(total_parkir)+sum(total_tol)+sum(total_bbm) AS pengeluaran FROM `cost`, detail_pengembalian, transaksi_pengembalian where transaksi_pengembalian.tgl_transaksi ='"+dateNow+"' AND cost.id_detail_pengembalian=detail_pengembalian.id_detail_pengembalian AND detail_pengembalian.id_pengembalian = transaksi_pengembalian.id_pengembalian");
+        while(kon.myRs.next()) profit-=kon.myRs.getInt("pengeluaran");
+        kon.close();
+        return profit;
+    }
+    
+    public int setLblProfitMonth() throws SQLException{
+        int profit=0;
+        kon.connect();
+        kon.createQuery("select total_harga from transaksi_peminjaman where month(tgl_transaksi) ='"+monthNow+"'");
+        while(kon.myRs.next()) profit+=kon.myRs.getInt("total_harga");
+        kon.createQuery("SELECT sum(total_parkir)+sum(total_tol)+sum(total_bbm) AS pengeluaran FROM `cost`, detail_pengembalian, transaksi_pengembalian where month(transaksi_pengembalian.tgl_transaksi) ='"+monthNow+"' AND cost.id_detail_pengembalian=detail_pengembalian.id_detail_pengembalian AND detail_pengembalian.id_pengembalian = transaksi_pengembalian.id_pengembalian");
+        while(kon.myRs.next()) profit-=kon.myRs.getInt("pengeluaran");
+        kon.close();
+        return profit;
+    }
+    
+    public void updateBusPopuler() throws SQLException{
+        kon.connect();
+        kon.createQuery("select * from jenis_bus order by jumlah_disewa desc limit 3");
+        int index=0;
+        while(kon.myRs.next()){
+            if(index==0){
+                lblOne.setText(kon.myRs.getString("nama_jenis"));
+                lblBanyakOne.setText("("+kon.myRs.getString("jumlah_disewa")+" kali)");
+            }
+            else if(index==1){
+                lblTwo.setText(kon.myRs.getString("nama_jenis"));
+                lblBanyakTwo.setText("("+kon.myRs.getString("jumlah_disewa")+" kali)");
+            }
+            else{
+                lblThree.setText(kon.myRs.getString("nama_jenis"));
+                lblBanyakThree.setText("("+kon.myRs.getString("jumlah_disewa")+" kali)");
+            }
+            index++;
+        }
+        kon.close();
     }
 
     /**
@@ -27,134 +109,208 @@ public class Dashboard_Admin extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
+        btnBack = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        lblTransDay = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        lblTransMonth = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        lblProfitDay = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        lblProfitMonth = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        lblOne = new javax.swing.JLabel();
+        lblTwo = new javax.swing.JLabel();
+        lblThree = new javax.swing.JLabel();
+        lblBanyakOne = new javax.swing.JLabel();
+        lblBanyakTwo = new javax.swing.JLabel();
+        lblBanyakThree = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("Back");
+        btnBack.setText("Back");
+        btnBack.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnBackMouseClicked(evt);
+            }
+        });
 
         jLabel1.setText("Dashboard");
 
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("11");
-        jLabel2.setBorder(new javax.swing.border.MatteBorder(null));
+        lblTransDay.setBackground(new java.awt.Color(204, 204, 255));
+        lblTransDay.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTransDay.setText("11");
+        lblTransDay.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel3.setText("Total Transaksi Hari Ini");
 
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("131");
-        jLabel4.setBorder(new javax.swing.border.MatteBorder(null));
+        lblTransMonth.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTransMonth.setText("131");
+        lblTransMonth.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel5.setText("Total Transaksi Bulan Ini");
 
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("8.900.000");
-        jLabel6.setBorder(new javax.swing.border.MatteBorder(null));
+        lblProfitDay.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblProfitDay.setText("8.900.000");
+        lblProfitDay.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel7.setText("Total Pendapatan Hari Ini");
 
-        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setText("73.740.000");
-        jLabel8.setBorder(new javax.swing.border.MatteBorder(null));
+        lblProfitMonth.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblProfitMonth.setText("73.740.000");
+        lblProfitMonth.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel9.setText("Total Pendapatan Bulan Ini");
 
-        jLabel10.setText("Bus yang Terpopuler");
+        jLabel2.setText("Bus Terpopuler");
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "1. Big Bus (234 kali)", "2. Jet Bus (153 kali)" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(jList1);
+        jLabel4.setText("1.");
+
+        jLabel6.setText("2.");
+
+        jLabel8.setText("3.");
+
+        lblOne.setText("-");
+
+        lblTwo.setText("-");
+
+        lblThree.setText("-");
+
+        lblBanyakOne.setText("(0 kali)");
+
+        lblBanyakTwo.setText("(0 kali)");
+
+        lblBanyakThree.setText("(0 kali)");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnBack)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(421, 421, 421)
+                        .addComponent(jLabel1)))
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(429, 429, 429)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(lblTransDay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(109, 109, 109)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblTransMonth, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 133, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
-                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(lblProfitDay, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(109, 109, 109)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
-                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(lblProfitMonth, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(45, 45, 45))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblOne, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(lblBanyakOne))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblTwo, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(lblBanyakTwo))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblThree, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(lblBanyakThree)))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnBack)
+                .addGap(27, 27, 27)
                 .addComponent(jLabel1)
-                .addGap(58, 58, 58)
+                .addGap(42, 42, 42)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblTransDay, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblTransMonth, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblProfitDay, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
-                .addComponent(jLabel10)
+                        .addComponent(lblProfitMonth, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(40, 40, 40)
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(lblOne)
+                    .addComponent(lblBanyakOne))
+                .addGap(13, 13, 13)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(lblTwo)
+                    .addComponent(lblBanyakTwo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(42, 42, 42))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(lblThree)
+                    .addComponent(lblBanyakThree))
+                .addContainerGap(124, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnBackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackMouseClicked
+        this.setVisible(false);
+        new HomePage_Admin().setVisible(true);
+    }//GEN-LAST:event_btnBackMouseClicked
+
+    public String getDateNow(){
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(cal.getTime());
+    }
+    
+    public String getMonthNow(){
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("MM");
+        return sdf.format(cal.getTime());
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -185,15 +341,18 @@ public class Dashboard_Admin extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Dashboard_Admin().setVisible(true);
+                try {
+                    new Dashboard_Admin().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Dashboard_Admin.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnBack;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -202,7 +361,15 @@ public class Dashboard_Admin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JList<String> jList1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblBanyakOne;
+    private javax.swing.JLabel lblBanyakThree;
+    private javax.swing.JLabel lblBanyakTwo;
+    private javax.swing.JLabel lblOne;
+    private javax.swing.JLabel lblProfitDay;
+    private javax.swing.JLabel lblProfitMonth;
+    private javax.swing.JLabel lblThree;
+    private javax.swing.JLabel lblTransDay;
+    private javax.swing.JLabel lblTransMonth;
+    private javax.swing.JLabel lblTwo;
     // End of variables declaration//GEN-END:variables
 }
